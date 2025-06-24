@@ -1,0 +1,17 @@
+=<div class="home-container w-full min-h-screen px-4 sm:px-6 lg:px-8 py-10 bg-white dark:bg-custom-black transition-colors">
+  <!-- Header -->
+  <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+    Explore Polls
+  </h1>
+
+  <!-- Poll Cards Grid -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    @for (item of cards; track $index) {
+      <app-poll-card
+        (vote)="handleVote($event)"
+        [config]="item"
+        class="w-full"
+      ></app-poll-card>
+    }
+  </div>
+</div>

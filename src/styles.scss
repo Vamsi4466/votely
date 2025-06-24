@@ -1,0 +1,37 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
+
+@layer components{
+
+    .btn{
+        @apply p-4 w-fit outline-none border-none min-w-[100px] rounded-lg font-bold
+        bg-custom-boxBorderTop text-white cursor-pointer;
+    }
+
+
+    .input{
+        @apply p-4 border-custom-boxBorder border-2 w-full outline-none bg-white
+        bg-opacity-5 rounded-lg dark:text-white text-lg placeholder-gray-600 text-black;
+    }
+
+    .top-highlighted-box{
+        @apply border-custom-boxBorder border-t-custom-boxBorderTop border-t-4 
+        border-solid dark:bg-custom-boxBg p-4 border-custom-boxBorder rounded-xl
+        shadow-md;
+    }
+
+    button:disabled{
+        @apply bg-gray-400;
+    }
+
+
+}
+
+@layer base{
+    html{
+        @apply font-sans;
+    }
+}

@@ -1,0 +1,112 @@
+<div class="flex h-screen bg-white dark:bg-custom-black text-gray-800 dark:text-white">
+  <!-- Side Navigation -->
+  <div *ngIf="isSideNav()" class="w-72 min-w-[18rem] flex flex-col border-r border-gray-200 dark:border-gray-700 shadow-md px-4 py-6">
+    <!-- Logo Section -->
+    <div class="flex items-center justify-center h-12 mb-6">
+      <img (click)="navigateToHome()" src="assets/logo.png" alt="Logo" class="h-8 cursor-pointer" />
+    </div>
+
+    <!-- Navigation Items -->
+    <div class="flex-1 space-y-2">
+      <div
+        *ngFor="let item of navItems"
+        (click)="selectTab(item)"
+        [ngClass]="{
+          'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300': item.active,
+          'hover:bg-gray-100 dark:hover:bg-gray-800': !item.active
+        }"
+        class="flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-colors duration-200"
+      >
+        <fa-icon [icon]="item.icon"></fa-icon>
+        <span class="font-medium text-base">{{ item.name }}</span>
+      </div>
+    </div>
+
+    <!-- Logout Button (Fallback for mobile) -->
+    <button
+      (click)="authService.logoutUser()"
+      class="mt-6 flex items-center justify-center gap-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900 px-4 py-2 rounded-lg transition sm:hidden"
+    >
+      <fa-icon [icon]="faSignOutAlt"></fa-icon>
+      <span class="font-medium">Log Out</span>
+    </button>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 overflow-y-auto relative">
+    <!-- Profile + Theme Toggle -->
+    <div *ngIf="isSideNav() && !isAuthRoute()" class="fixed top-4 right-4 z-50">
+      <div class="relative group" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
+        <div class="flex items-center gap-4 bg-white dark:bg-custom-grey shadow-xl px-5 py-2 rounded-full border border-gray-200 dark:border-gray-600 transition">
+          <!-- Profile Image -->
+          <img
+            [src]="profilePic"
+            alt="Profile"
+            class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-500 object-cover"
+          />
+
+          <!-- Username -->
+          <span class="text-sm font-semibold hidden sm:block">{{ userName }}</span>
+
+          <!-- Dark Mode Toggle -->
+          <button
+            (click)="themeService.toggleTheme()"
+            class="relative w-10 h-10 flex items-center justify-center rounded-full hover:scale-105 transition bg-gray-100 dark:bg-gray-700"
+            aria-label="Toggle Dark Mode"
+          >
+            <!-- Light Icon -->
+            <svg
+              *ngIf="themeService.getCurrentTheme() === 'light'"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-gray-700"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                d="M10 3.75a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V4.5A.75.75 0 0110 3.75zM10 13.5a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75zM15.364 5.636a.75.75 0 011.061 1.06l-1.061 1.061a.75.75 0 11-1.061-1.06l1.061-1.061zM5.636 15.364a.75.75 0 011.061 1.06l-1.061 1.061a.75.75 0 01-1.06-1.06l1.06-1.061zM16.25 10a.75.75 0 01.75.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75.75.75 0 01.75-.75zM3.75 10a.75.75 0 01.75.75H3a.75.75 0 010-1.5h1.5a.75.75 0 01-.75.75zM15.364 14.364a.75.75 0 01-1.06 1.061l-1.061-1.061a.75.75 0 011.06-1.06l1.061 1.06zM5.636 4.636a.75.75 0 01-1.06 1.061L3.515 4.636a.75.75 0 011.06-1.06l1.06 1.06z"
+              />
+              <path
+                d="M10 6.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z"
+              />
+            </svg>
+
+            <!-- Dark Icon -->
+            <svg
+              *ngIf="themeService.getCurrentTheme() === 'dark'"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-yellow-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 3v1m0 16v1m8.66-13.66l-.7.7M4.34 19.66l-.7.7M21 12h-1M4 12H3m16.66 7.66l-.7-.7M4.34 4.34l-.7-.7M12 5a7 7 0 000 14 7 7 0 000-14z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Dropdown -->
+        <div
+          *ngIf="showDropdown"
+          class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-md py-2"
+        >
+          <button
+            (click)="logout()"
+            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Slot -->
+    <div class="p-6">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

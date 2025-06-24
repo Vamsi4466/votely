@@ -1,0 +1,23 @@
+<div class="my-poll-container w-full flex flex-col gap-y-4 p-8 dark:dark:bg-custom-black min-h-screen min-w-screen">
+
+    @if (cards && cards.length > 0){
+        <div class="view-polls w-full flex items-start flex-wrap gap-4">
+            @for (item of cards; track $index) {
+                <div class="card-sect self-stretch">
+                    <app-poll-card (delete)="handleDelete(item.id)" [isAdmin]="true" class="card-sect" [config]="item"></app-poll-card>
+                </div>
+    
+            }
+            
+            
+        </div>
+    } 
+
+    @if (cards && cards.length ===0){
+        <app-empty-card></app-empty-card>
+    } 
+  
+
+
+    
+</div>

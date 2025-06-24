@@ -1,0 +1,76 @@
+<div
+  class="poll-card-container w-full max-w-3xl min-w-[320px] mx-auto p-8 bg-white dark:bg-gray-900 
+  rounded-2xl shadow-xl flex flex-col gap-y-6 transition-all border border-gray-200 dark:border-gray-700"
+>
+  <!-- Title -->
+  <h2 class="text-3xl font-bold text-gray-900 dark:text-white break-words leading-snug">
+    {{ config.title }}
+  </h2>
+
+  <!-- If already voted or is owner: show results -->
+  @if (config.hasVoted || config.isOwner) {
+    <div class="flex flex-col gap-y-5">
+      @for (item of config.options; track $index) {
+        <div class="space-y-1">
+          <div class="flex justify-between text-base font-medium text-gray-700 dark:text-gray-300">
+            <span class="truncate">{{ item.name }}</span>
+            <span>{{ percentage(item.count) + '%' }}</span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-4 relative overflow-hidden">
+            <div
+              [style.width]="percentage(item.count) + '%'"
+              class="absolute top-0 left-0 h-full bg-blue-600 transition-all rounded-full"
+            ></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- If not voted yet -->
+  @if (!config.hasVoted && !config.isOwner) {
+    <div class="flex flex-col gap-y-4">
+      @for (item of config.options; track $index) {
+        <div
+          (click)="selectedOption($index)"
+          [ngClass]="{
+            'bg-blue-100 dark:bg-blue-800 border-blue-500': $index === selectedIndex
+          }"
+          class="p-4 border border-gray-300 dark:border-gray-700 rounded-xl 
+          text-gray-800 dark:text-white font-medium cursor-pointer hover:shadow-md transition"
+        >
+          {{ item.name }}
+        </div>
+      }
+    </div>
+
+    <div class="flex justify-end pt-6">
+      <button
+        (click)="handleVote()"
+        [disabled]="selectedIndex < 0"
+        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold 
+        rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Vote
+      </button>
+    </div>
+  }
+
+  <!-- Footer Section -->
+  <div class="pt-6 border-t border-gray-300 dark:border-gray-700">
+    <div class="flex justify-between items-center">
+      <span class="text-sm text-gray-500 dark:text-gray-400">
+        {{ config.totalVotes }} {{ config.totalVotes === 1 ? 'Vote' : 'Votes' }}
+      </span>
+
+      @if (isAdmin) {
+        <button
+          (click)="handleDelete()"
+          class="text-sm px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition"
+        >
+          Delete
+        </button>
+      }
+    </div>
+  </div>
+</div>
